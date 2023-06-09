@@ -3,6 +3,9 @@ package com.api.catalog.service;
 
 
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +23,13 @@ public class ProductService {
 		return productRepository.save(productModel);
 	}
 	
+	public List<ProductModel> findAll(){
+		return productRepository.findAll();
+	}
 	
+	public Optional<ProductModel> findById(Integer id){
+		return productRepository.findById(id);
+	}
 	
 	
 }

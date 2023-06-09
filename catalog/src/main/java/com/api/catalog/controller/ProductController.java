@@ -1,5 +1,6 @@
 package com.api.catalog.controller;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,8 +35,18 @@ public class ProductController {
 	CategoryService categoryService;
 
 	@GetMapping
-	public String hello() {
-		return ("hello");  
+	public ResponseEntity<Object> listProducts(){
+		List<ProductModel> list = productService.findAll();
+		return ResponseEntity.status(HttpStatus.OK).body(list);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Object> getProductById(@PathVariable(value = "id") Integer id){
+		Optional<ProductModel> productModelOptional = productService.findById(id);
+		if(!productModelOptional.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado!!");
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(productModelOptional.get());
 	}
 	
 	@PostMapping
@@ -53,6 +66,33 @@ public class ProductController {
 		 
 	
 		return ResponseEntity.status(HttpStatus.OK).body(productService.save(productModel));
+		
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") Integer id, @RequestBody @Valid ProductDto productDto){
+		Optional<ProductModel> productModelOptional = productService.findById(id);
+		Optional<CategoryModel> optionalCategory = categoryService.findById(productDto.getCategory());
+		if(!productModelOptional.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
+		};
+		if(!optionalCategory.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria não encontrada");
+		};
+		var category = new CategoryModel();
+		category.setId(optionalCategory.get().getId());
+		category.setName(optionalCategory.get().getName());
+		
+		var productModel = new ProductModel();
+		BeanUtils.copyProperties(productDto, productModel);
+		productModel.setId(productModelOptional.get().getId());
+		productModel.setName(productDto.getName());
+		productModel.setCod_product(productDto.getCod_product());
+		productModel.setImageurl(productDto.getImageurl());
+		productModel.setCategory(category);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(productService.save(productModel));
+	
 		
 	}
 	
