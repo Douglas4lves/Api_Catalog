@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.api.catalog.model.ProductModel;
 import com.api.catalog.repository.ProductRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ProductService {
 	
@@ -31,5 +33,9 @@ public class ProductService {
 		return productRepository.findById(id);
 	}
 	
+	@Transactional
+	public void delete(ProductModel productModel) {
+		productRepository.delete(productModel);
+	}
 	
 }
