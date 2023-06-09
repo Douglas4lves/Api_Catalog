@@ -1,10 +1,13 @@
 package com.api.catalog.model;
 
 import java.util.List;
-import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,20 +21,37 @@ public class CategoryModel {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private UUID id_category;
+	private Integer id;
 	
 	@Column(nullable = false, unique = true, length = 50)
 	private String name;
 	
-	@OneToMany(mappedBy = "category")
+	@JsonIgnore
+	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER) 
 	private List<ProductModel> products;
+	
+	
 
-	public UUID getId_category() {
-		return id_category;
+	public CategoryModel() {
+		super();
+	}
+	
+	
+
+	public CategoryModel(String name, List<ProductModel> products) {
+		super();
+		this.name = name;
+		this.products = products;
 	}
 
-	public void setId_category(UUID id_category) {
-		this.id_category = id_category;
+
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -48,6 +68,11 @@ public class CategoryModel {
 
 	public void setProducts(List<ProductModel> products) {
 		this.products = products;
+	}
+
+	@Override
+	public String toString() {
+		return "CategoryModel [id=" + id + ", name=" + name + ", products=" + products + "]";
 	}
 	
 	

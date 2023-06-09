@@ -1,7 +1,8 @@
 package com.api.catalog.controller;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,17 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 	
+	
 	@GetMapping
 	public ResponseEntity<Object> listCategories() {
-		return ResponseEntity.status(HttpStatus.OK).body(categoryService.findAll());
+		
+		List<CategoryModel> lista = categoryService.findAll();
+		return ResponseEntity.status(HttpStatus.OK).body(lista);
+		
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Object> getOneCategory(@PathVariable(value = "id") UUID id ){
+	public ResponseEntity<Object> getOneCategory(@PathVariable(value = "id") Integer id ){
 		Optional<CategoryModel> categoryModelOptional = categoryService.findById(id);
 		if(!categoryModelOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria não encontrada");
@@ -54,14 +59,14 @@ public class CategoryController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> updateCategory(@PathVariable(value="id") UUID id, @RequestBody @Valid CategoryDto categoryDto){
+	public ResponseEntity<Object> updateCategory(@PathVariable(value="id") Integer id, @RequestBody @Valid CategoryDto categoryDto){
 		Optional<CategoryModel> categoryModelOptional = categoryService.findById(id);
 		if(!categoryModelOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria não encontrada");
 		};
 		var categoryModel = new CategoryModel();
 		BeanUtils.copyProperties(categoryDto, categoryModel);
-		categoryModel.setId_category(categoryModelOptional.get().getId_category());
+		categoryModel.setId(categoryModelOptional.get().getId());
 		categoryModel.setName(categoryDto.getName());
 		
 		
@@ -70,7 +75,7 @@ public class CategoryController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> deleteCategory(@PathVariable(value = "id") UUID id){
+	public ResponseEntity<Object> deleteCategory(@PathVariable(value = "id") Integer id){
 		Optional<CategoryModel> categoryModelOptional = categoryService.findById(id);
 		if(!categoryModelOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria não existe");

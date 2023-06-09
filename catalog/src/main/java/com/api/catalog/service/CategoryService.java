@@ -2,7 +2,6 @@ package com.api.catalog.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,16 +19,20 @@ public class CategoryService {
 	
 	@Transactional
 	public CategoryModel save(CategoryModel categoryModel) {
-		return categoryRepository.save(categoryModel);
+		return categoryRepository.save(categoryModel); 
 	}
+	
 	
 	public List<CategoryModel> findAll(){
 		return categoryRepository.findAll();
 	}
 	
-	public Optional<CategoryModel> findById(UUID id){
+	public Optional<CategoryModel> findById(Integer id){
 		return categoryRepository.findById(id);
 	}
+	
+	
+	
 	
 	@Transactional
 	public void delete(CategoryModel categoryModel) {

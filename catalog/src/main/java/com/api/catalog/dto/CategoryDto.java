@@ -1,12 +1,16 @@
 package com.api.catalog.dto;
 
 
+
+
 import jakarta.validation.constraints.NotBlank;
 
 public class CategoryDto {
 	
+	
 	@NotBlank
 	private String name;
+	
 
 	public String getName() {
 		return name;

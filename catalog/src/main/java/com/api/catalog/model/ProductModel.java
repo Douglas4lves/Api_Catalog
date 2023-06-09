@@ -1,7 +1,8 @@
 package com.api.catalog.model;
 
 
-import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +19,7 @@ public class ProductModel {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private UUID id_product;
+	private Integer id;
 	
 	@Column(nullable = false, length = 130)
 	private String name;
@@ -29,16 +30,32 @@ public class ProductModel {
 	@Column(length = 300)
 	private String imageurl;
 	
+	
 	@ManyToOne
-	@JoinColumn(name = "id_category")
+	@JoinColumn(name = "category_id", nullable = false)
 	private CategoryModel category;
+ 
 
-	public UUID getId_product() {
-		return id_product;
+	public ProductModel() {
+		super();
 	}
 
-	public void setId_product(UUID id_product) {
-		this.id_product = id_product;
+	
+
+	public ProductModel(String name, int cod_product, String imageurl, CategoryModel category) {
+		super();
+		this.name = name;
+		this.cod_product = cod_product;
+		this.imageurl = imageurl;
+		this.category = category;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -71,6 +88,14 @@ public class ProductModel {
 
 	public void setCategory(CategoryModel category) {
 		this.category = category;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "ProductModel [id=" + id + ", name=" + name + ", cod_product=" + cod_product + ", imageurl=" + imageurl
+				+ ", category=" + category + "]";
 	}
 	
 	
