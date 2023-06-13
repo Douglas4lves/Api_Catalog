@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 public class CategoryDto {
 	
 	
-	@NotBlank
+	@NotBlank(message ="Campo nome não pode ser vazio ou nulo")
 	private String name;
 	
 

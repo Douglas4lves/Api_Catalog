@@ -38,7 +38,7 @@ public class ProductController {
 	@GetMapping
 	public ResponseEntity<Object> listProducts(){
 		List<ProductModel> list = productService.findAll();
-		return ResponseEntity.status(HttpStatus.OK).body(list);
+		return ResponseEntity.status(HttpStatus.OK).body(list); 
 	}
 	
 	@GetMapping("/{id}")
@@ -53,13 +53,10 @@ public class ProductController {
 	@PostMapping
 	public ResponseEntity<Object> saveProduct(@RequestBody @Valid ProductDto productDto){
 		
-		Optional<CategoryModel> optionalCategory = categoryService.findById(productDto.getCategory());
-		if(!optionalCategory.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria não existe");
-		};
+		CategoryModel optionalCategory = categoryService.findById(productDto.getCategory());
 		var category = new CategoryModel();
-		category.setId(optionalCategory.get().getId());
-		category.setName(optionalCategory.get().getName());
+		category.setId(optionalCategory.getId());
+		category.setName(optionalCategory.getName());
 		
 		var productModel =new ProductModel();
 		BeanUtils.copyProperties(productDto, productModel);
@@ -72,17 +69,12 @@ public class ProductController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") Integer id, @RequestBody @Valid ProductDto productDto){
+		
 		Optional<ProductModel> productModelOptional = productService.findById(id);
-		Optional<CategoryModel> optionalCategory = categoryService.findById(productDto.getCategory());
-		if(!productModelOptional.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
-		};
-		if(!optionalCategory.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria não encontrada");
-		};
+		CategoryModel optionalCategory = categoryService.findById(productDto.getCategory());
 		var category = new CategoryModel();
-		category.setId(optionalCategory.get().getId());
-		category.setName(optionalCategory.get().getName());
+		category.setId(optionalCategory.getId());
+		category.setName(optionalCategory.getName());
 		
 		var productModel = new ProductModel();
 		BeanUtils.copyProperties(productDto, productModel);

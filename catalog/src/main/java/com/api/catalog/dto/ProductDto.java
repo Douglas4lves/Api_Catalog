@@ -1,9 +1,5 @@
 package com.api.catalog.dto;
 
-
-
-
-import com.api.catalog.model.CategoryModel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -11,10 +7,10 @@ public class ProductDto {
 	
 	
 	
-	@NotBlank
+	@NotBlank(message = "O campo não poder ser vazio ou nulo")
 	private String name;
 	
-	@NotNull
+	@NotNull(message = "o campo não pode ser nulo")
 	private int cod_product;
 	
 	@NotBlank

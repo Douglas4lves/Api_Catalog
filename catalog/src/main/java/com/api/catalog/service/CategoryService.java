@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.api.catalog.model.CategoryModel;
 import com.api.catalog.repository.CategoryRepository;
+import com.api.catalog.service.exceptions.EntityNotFoundException;
 
 import jakarta.transaction.Transactional;
 
@@ -27,8 +28,9 @@ public class CategoryService {
 		return categoryRepository.findAll();
 	}
 	
-	public Optional<CategoryModel> findById(Integer id){
-		return categoryRepository.findById(id);
+	public CategoryModel findById(Integer id){
+		
+		return categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Id não encontrado: " + id));
 	}
 	
 	
