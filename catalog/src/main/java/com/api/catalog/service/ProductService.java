@@ -4,14 +4,13 @@ package com.api.catalog.service;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import com.api.catalog.model.ProductModel;
 import com.api.catalog.repository.ProductRepository;
+import com.api.catalog.service.exceptions.EntityNotFoundException;
 
 import jakarta.transaction.Transactional;
 
@@ -29,8 +28,8 @@ public class ProductService {
 		return productRepository.findAll();
 	}
 	
-	public Optional<ProductModel> findById(Integer id){
-		return productRepository.findById(id);
+	public ProductModel findById(Integer id){
+		return productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
 	}
 	
 	@Transactional

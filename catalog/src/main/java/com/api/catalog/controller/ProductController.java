@@ -1,8 +1,6 @@
 package com.api.catalog.controller;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +40,9 @@ public class ProductController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Object> getProductById(@PathVariable(value = "id") Integer id){
-		Optional<ProductModel> productModelOptional = productService.findById(id);
-		if(!productModelOptional.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado!!");
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(productModelOptional.get());
+	public ResponseEntity<ProductModel> getProductById(@PathVariable(value = "id") Integer id){
+		ProductModel productModelOptional = productService.findById(id);
+		return ResponseEntity.status(HttpStatus.OK).body(productModelOptional);
 	}
 	
 	@PostMapping
@@ -61,16 +56,14 @@ public class ProductController {
 		var productModel =new ProductModel();
 		BeanUtils.copyProperties(productDto, productModel);
 		productModel.setCategory(category);
-		 
-	
-		return ResponseEntity.status(HttpStatus.OK).body(productService.save(productModel));
 		
+		return ResponseEntity.status(HttpStatus.OK).body(productService.save(productModel));
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") Integer id, @RequestBody @Valid ProductDto productDto){
+	public ResponseEntity<ProductModel> updateProduct(@PathVariable(value = "id") Integer id, @RequestBody @Valid ProductDto productDto){
 		
-		Optional<ProductModel> productModelOptional = productService.findById(id);
+		ProductModel productModelOptional = productService.findById(id);
 		CategoryModel optionalCategory = categoryService.findById(productDto.getCategory());
 		var category = new CategoryModel();
 		category.setId(optionalCategory.getId());
@@ -78,24 +71,17 @@ public class ProductController {
 		
 		var productModel = new ProductModel();
 		BeanUtils.copyProperties(productDto, productModel);
-		productModel.setId(productModelOptional.get().getId());
-		productModel.setName(productDto.getName());
-		productModel.setCod_product(productDto.getCod_product());
-		productModel.setImageurl(productDto.getImageurl());
+		productModel.setId(productModelOptional.getId());
 		productModel.setCategory(category);
-		
 		return ResponseEntity.status(HttpStatus.OK).body(productService.save(productModel));
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") Integer id){
-		Optional<ProductModel> productOptional = productService.findById(id);
-		if(!productOptional.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
-		};
-		
-		productService.delete(productOptional.get());
-		return ResponseEntity.status(HttpStatus.OK).body("Produto deletado com sucesso");
+	public ResponseEntity<ProductModel> deleteProduct(@PathVariable(value = "id") Integer id){
+		ProductModel productOptional = productService.findById(id);
+		productService.delete(productOptional);
+		return ResponseEntity.status(HttpStatus.OK).body(productOptional);
 	}
+	
 	
 }

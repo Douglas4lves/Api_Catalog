@@ -2,11 +2,14 @@ package com.api.catalog.controller.exceptions;
 
 import java.time.Instant;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 
+import com.api.catalog.service.exceptions.CategoryNameAlreadyExistsException;
 import com.api.catalog.service.exceptions.EntityNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +26,23 @@ public class ControllerExceptionHandler {
 		err.setMessage(e.getMessage());
 		err.setPath(request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+	}
+	
+	@ExceptionHandler(CategoryNameAlreadyExistsException.class)
+	public ResponseEntity<Object> handleCategoryNameAlreadyExistsException(CategoryNameAlreadyExistsException e, WebRequest request){
+		String errorMessage = e.getMessage();
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
+	}
+	
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<StandardError> handleDataIntegrityViolation(DataIntegrityViolationException e, HttpServletRequest request) {
+		StandardError err = new StandardError();
+		err.setTimeStamp(Instant.now());
+		err.setStatus(HttpStatus.CONFLICT.value());
+		err.setError("Conflito de registros");
+		err.setMessage(e.getMessage());
+		err.setPath(request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
 	}
 	
 }

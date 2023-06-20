@@ -1,11 +1,14 @@
 package com.api.catalog.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,10 +34,8 @@ public class CategoryController {
 	
 	@GetMapping
 	public ResponseEntity<Object> listCategories() {
-		
-		List<CategoryModel> lista = categoryService.findAll();
+		List<CategoryModel> lista = categoryService.findAllCategories();
 		return ResponseEntity.status(HttpStatus.OK).body(lista);
-		
 	}
 	
 	@GetMapping("/{id}")
@@ -45,21 +46,23 @@ public class CategoryController {
 	
 	@PostMapping
 	public ResponseEntity<Object> saveCategory(@RequestBody @Valid CategoryDto categoryDto){
-		
 		var categoryModel = new CategoryModel();
 		BeanUtils.copyProperties(categoryDto, categoryModel);
-		
 		return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(categoryModel));
-		
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<CategoryModel> updateCategory(@PathVariable(value="id") Integer id, @RequestBody @Valid CategoryDto categoryDto){
+	public ResponseEntity<Object> updateCategory(@PathVariable(value="id") Integer id, @RequestBody @Valid CategoryDto categoryDto, BindingResult bindingResult){
+		if(bindingResult.hasErrors()) {
+			List<String> errors = bindingResult.getAllErrors().stream()
+					.map(DefaultMessageSourceResolvable::getDefaultMessage)
+					.collect(Collectors.toList());
+			return ResponseEntity.badRequest().body(errors);
+		}
 		CategoryModel categoryModelOptional = categoryService.findById(id);
 		var categoryModel = new CategoryModel();
 		BeanUtils.copyProperties(categoryDto, categoryModel);
-		categoryModel.setId(categoryModelOptional.getId());
-		categoryModel.setName(categoryDto.getName());	
+		categoryModel.setId(categoryModelOptional.getId());	
 		return ResponseEntity.status(HttpStatus.OK).body(categoryService.save(categoryModel));
 		
 	}
