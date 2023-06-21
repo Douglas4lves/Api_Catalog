@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import com.api.catalog.service.exceptions.CategoryNameAlreadyExistsException;
+import com.api.catalog.service.exceptions.NameAlreadyExistsException;
+import com.api.catalog.service.exceptions.CodAlreadyExistsException;
 import com.api.catalog.service.exceptions.EntityNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,8 +29,14 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 	}
 	
-	@ExceptionHandler(CategoryNameAlreadyExistsException.class)
-	public ResponseEntity<Object> handleCategoryNameAlreadyExistsException(CategoryNameAlreadyExistsException e, WebRequest request){
+	@ExceptionHandler(NameAlreadyExistsException.class)
+	public ResponseEntity<Object> handleNameAlreadyExistsException(NameAlreadyExistsException e, WebRequest request){
+		String errorMessage = e.getMessage();
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
+	}
+	
+	@ExceptionHandler(CodAlreadyExistsException.class)
+	public ResponseEntity<Object> handleCodAlreadyExistsException(CodAlreadyExistsException e){
 		String errorMessage = e.getMessage();
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
 	}
@@ -44,5 +51,7 @@ public class ControllerExceptionHandler {
 		err.setPath(request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
 	}
+	
+	
 	
 }

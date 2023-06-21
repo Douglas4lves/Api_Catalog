@@ -11,7 +11,7 @@ public class ProductDto {
 	private String name;
 	
 	@NotNull(message = "o campo não pode ser nulo")
-	private int cod_product;
+	private int codProduct;
 	
 	@NotBlank
 	private String imageurl;
@@ -37,12 +37,14 @@ public class ProductDto {
 		this.name = name;
 	}
 
-	public int getCod_product() {
-		return cod_product;
+	
+
+	public int getCodProduct() {
+		return codProduct;
 	}
 
-	public void setCod_product(int cod_product) {
-		this.cod_product = cod_product;
+	public void setCodProduct(int codProduct) {
+		this.codProduct = codProduct;
 	}
 
 	public String getImageurl() {

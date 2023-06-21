@@ -20,8 +20,8 @@ public class ProductModel {
 	@Column(nullable = false, length = 130)
 	private String name;
 	
-	@Column(nullable = false, unique = true)
-	private int cod_product;
+	@Column(name = "cod_product",nullable = false, unique = true)
+	private int codProduct;
 	
 	@Column(length = 300)
 	private String imageurl;
@@ -38,10 +38,10 @@ public class ProductModel {
 
 	
 
-	public ProductModel(String name, int cod_product, String imageurl, CategoryModel category) {
+	public ProductModel(String name, int codProduct, String imageurl, CategoryModel category) {
 		super();
 		this.name = name;
-		this.cod_product = cod_product;
+		this.codProduct = codProduct;
 		this.imageurl = imageurl;
 		this.category = category;
 	}
@@ -62,12 +62,13 @@ public class ProductModel {
 		this.name = name;
 	}
 
-	public int getCod_product() {
-		return cod_product;
+	
+	public int getCodProduct() {
+		return codProduct;
 	}
 
-	public void setCod_product(int cod_product) {
-		this.cod_product = cod_product;
+	public void setCodProduct(int codProduct) {
+		this.codProduct = codProduct;
 	}
 
 	public String getImageurl() {
@@ -90,7 +91,7 @@ public class ProductModel {
 
 	@Override
 	public String toString() {
-		return "ProductModel [id=" + id + ", name=" + name + ", cod_product=" + cod_product + ", imageurl=" + imageurl
+		return "ProductModel [id=" + id + ", name=" + name + ", cod_product=" + codProduct + ", imageurl=" + imageurl
 				+ ", category=" + category + "]";
 	}
 	

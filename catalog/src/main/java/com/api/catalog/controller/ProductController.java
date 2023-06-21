@@ -1,11 +1,14 @@
 package com.api.catalog.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,9 +48,21 @@ public class ProductController {
 		return ResponseEntity.status(HttpStatus.OK).body(productModelOptional);
 	}
 	
+	@GetMapping("/ByCodeProduct/{codProduct}") 
+	public ResponseEntity<ProductModel> getProductsByCod(@PathVariable(value = "codProduct") int codProduct){
+		ProductModel product = productService.getProductByCod(codProduct);
+		return ResponseEntity.status(HttpStatus.OK).body(product);
+	}
+	
 	@PostMapping
-	public ResponseEntity<Object> saveProduct(@RequestBody @Valid ProductDto productDto){
-		
+	public ResponseEntity<Object> saveProduct(@RequestBody @Valid ProductDto productDto, BindingResult bindingResult ){
+		if(bindingResult.hasErrors()) {
+			List<String> errors = bindingResult.getAllErrors().stream()
+					.map(DefaultMessageSourceResolvable::getDefaultMessage)
+					.collect(Collectors.toList());
+			return ResponseEntity.badRequest().body(errors);
+		}
+		productService.existsByCodProduct(productDto.getCodProduct());
 		CategoryModel optionalCategory = categoryService.findById(productDto.getCategory());
 		var category = new CategoryModel();
 		category.setId(optionalCategory.getId());
@@ -61,8 +76,13 @@ public class ProductController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<ProductModel> updateProduct(@PathVariable(value = "id") Integer id, @RequestBody @Valid ProductDto productDto){
-		
+	public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") Integer id, @RequestBody @Valid ProductDto productDto, BindingResult bindingResult){
+		if(bindingResult.hasErrors()) {
+			List<String> errors = bindingResult.getAllErrors().stream()
+					.map(DefaultMessageSourceResolvable::getDefaultMessage)
+					.collect(Collectors.toList());
+			return ResponseEntity.badRequest().body(errors);
+		}
 		ProductModel productModelOptional = productService.findById(id);
 		CategoryModel optionalCategory = categoryService.findById(productDto.getCategory());
 		var category = new CategoryModel();

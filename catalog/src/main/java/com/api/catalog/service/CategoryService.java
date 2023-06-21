@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.api.catalog.model.CategoryModel;
 import com.api.catalog.repository.CategoryRepository;
-import com.api.catalog.service.exceptions.CategoryNameAlreadyExistsException;
+import com.api.catalog.service.exceptions.NameAlreadyExistsException;
 import com.api.catalog.service.exceptions.EntityNotFoundException;
 
 import jakarta.transaction.Transactional;
@@ -24,7 +24,7 @@ public class CategoryService {
 	@Transactional
 	public CategoryModel save(CategoryModel categoryModel) {
 		if(categoryRepository.existsByName(categoryModel.getName())) {
-			throw new CategoryNameAlreadyExistsException("Nome já existe em Categoria");
+			throw new NameAlreadyExistsException("Nome já existe em Categoria");
 		}
 		return categoryRepository.save(categoryModel);
 	}
