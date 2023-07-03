@@ -25,7 +25,7 @@ import com.api.catalog.service.CategoryService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/api/category")
 public class CategoryController {
 	
 	@Autowired
@@ -33,7 +33,7 @@ public class CategoryController {
 	
 	
 	@GetMapping
-	public ResponseEntity<Object> listCategories() {
+	public ResponseEntity<Object> listCategories() { 
 		List<CategoryModel> lista = categoryService.findAllCategories();
 		return ResponseEntity.status(HttpStatus.OK).body(lista);
 	}

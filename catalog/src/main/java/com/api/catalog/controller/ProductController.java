@@ -27,7 +27,7 @@ import com.api.catalog.service.ProductService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/api/product")
 public class ProductController {
 	
 	@Autowired
@@ -36,11 +36,13 @@ public class ProductController {
 	@Autowired
 	CategoryService categoryService;
 
+	
 	@GetMapping
 	public ResponseEntity<Object> listProducts(){
 		List<ProductModel> list = productService.findAll();
 		return ResponseEntity.status(HttpStatus.OK).body(list); 
 	}
+	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductModel> getProductById(@PathVariable(value = "id") Integer id){
