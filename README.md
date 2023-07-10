@@ -10,6 +10,8 @@
 exemplo utilizando swagger
 ![image](https://github.com/Douglas4lves/Api_Catalog/assets/92491046/f3f33798-076a-43d2-bd90-ed52d27c8bc3)
 ![image](https://github.com/Douglas4lves/Api_Catalog/assets/92491046/cf064d2d-aff8-4a8e-86aa-b45676782e70)
+![image](https://github.com/Douglas4lves/Api_Catalog/assets/92491046/82cd9800-b8ff-4604-b0d9-d9369abc6037)
+
 
 ## Modelo Conceitual
 ![image](https://github.com/Douglas4lves/Api_Catalog/assets/92491046/8d856815-8263-4037-8b04-6f297253bba7)
