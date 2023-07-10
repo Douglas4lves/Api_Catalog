@@ -8,9 +8,8 @@ A api foi testada através da utilização da SpringDoc OpenApi pelo swagger
 
 
 ## Modelo Conceitual
-
-# Tecnologias utilizadas
-## Back end
+![image](https://github.com/Douglas4lves/Api_Catalog/assets/92491046/8d856815-8263-4037-8b04-6f297253bba7)
+## Tecnologias utilizadas
 - Java
 - Spring Boot
 - JPA/Hibernate
